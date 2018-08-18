@@ -1,0 +1,89 @@
+/* Loading indicator */
+
+#wrapper {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 10%;
+    left: 80%;
+}
+
+.spinner {
+    position: fixed;
+    pointer-events: all;
+    z-index: 1;
+}
+
+.spinner .loading-container {
+    opacity: 0.8;
+    top: 40%;
+    left: 50%;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    transform: translate(-25px, -25px);
+}
+
+.loading-container .ball {
+    background-color: rgba(0, 0, 0, 0);
+    border: 5px solid rgba(117, 89, 255, 0.9);
+    opacity: 0.9;
+    border-top: 5px solid rgba(0, 0, 0, 0);
+    border-left: 5px solid rgba(0, 0, 0, 0);
+    border-radius: 50px;
+    box-shadow: 0 0 35px rgb(33, 135, 231);
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    animation: spin 0.5s infinite linear;
+}
+
+.loading-container .ball-inner {
+    background-color: rgba(0, 0, 0, 0);
+    border: 5px solid rgba(117, 89, 255, 0.9);
+    opacity: 0.9;
+    border-top: 5px solid rgba(0, 0, 0, 0);
+    border-left: 5px solid rgba(0, 0, 0, 0);
+    border-radius: 50px;
+    box-shadow: 0 0 15px rgb(33, 135, 231);
+    width: 20px;
+    height: 20px;
+    margin: 10px 0 0 10px;
+    position: relative;
+    top: -50px;
+    animation: spin 0.5s infinite reverse linear;
+}
+
+.ball-text {
+    color: rgba(0, 183, 229, 0.9);
+    text-transform: uppercase;
+    text-align: center;
+    opacity: 0.8;
+    width: 100vw;
+    top: 40%;
+    left: 0;
+    font-size: 15px;
+    position: absolute;
+    transform: translatey(25px);
+    animation: pulse 1s infinite alternate ease-in-out;
+    margin: 0;
+    text-shadow: 0 0 35px rgb(33, 135, 231), 0 0 35px rgb(33, 135, 231), 0 0 35px rgb(33, 135, 231);
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0.4;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
