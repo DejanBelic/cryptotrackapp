@@ -1,15 +1,29 @@
 ul {
     display: flex;
     justify-content: space-evenly;
+    align-items: center;
+    margin: 0;
+    padding: 10px;
 }
 
 li {
     list-style: none;
     max-width: 200px;
-    background-color: #c5c5c5;
 }
 
 .table-wrapper {
     max-width: 1000px;
     margin: auto;
+}
+
+.rowItem:nth-of-type(even) {
+    background-color: #c5c5c5;
+}
+
+input {
+    display: block;
+}
+
+.btn-submit {
+    width: 100%;
 }

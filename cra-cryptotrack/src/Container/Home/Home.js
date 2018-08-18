@@ -9,12 +9,13 @@ class Home extends Component {
         super(props);
         this.state = {
             data: [],
-            loading: false
+            loading: false,
+            inputDisabled: true,
+            values: {}
         }
     }
 
-    componentWillMount() {
-
+    fetchInitialDataHandler = () => {
         // Set state to loading true which will trigger loading indicator.
         this.setState({ loading: true });
 
@@ -24,19 +25,76 @@ class Home extends Component {
             .then(data => {
                 this.setState({
                     data: data.data,
-                    loading: false
+                    loading: false,
                 })
                 console.log(data.data);
             })
-
     }
+
+    /*
+    * Function to populate input values. Load saved currencies from localStorage and check if input name and key matches, if so set input value.
+    */
+    populateInputsHandler = () => {
+        const currencies = localStorage.getItem("currencies");
+
+        if (currencies == null) return;
+
+        const inputParse = JSON.parse(currencies);
+        // Get Node collection of inputs.
+        const inputsAvailable = document.querySelectorAll('input[name]');
+        // Convert Node collection to array.
+        const InputElements = [...inputsAvailable];
+        // Object of same key-value pairs from inputs.
+        for (let [key, value] of Object.entries(inputParse)) {
+            InputElements.map(inputElement => {
+                if (inputElement.name === key) {
+                    inputElement.value = value;
+                }
+            })
+        }
+    }
+
+    /*
+    * Function for handling submit. Set all input values to localStorage.
+    */
+    handleSubmit = (event) => {
+        event.preventDefault();
+        let availableCurrencies = JSON.stringify(this.state.values);
+        window.localStorage.setItem('currencies', availableCurrencies);
+    }
+
+    /*
+    * Function for handling inputs, and disabling submits.
+    */
+    handleChange = (symbol, event) => {
+        event.persist();
+        this.setState(prevState => {
+            return {
+                values: {
+                    ...prevState.values,
+                    [symbol]: event.target.value
+                }
+            };
+        });
+    };
+
+    componentDidUpdate() {
+        this.populateInputsHandler();
+    }
+
+    componentWillMount() {
+        this.fetchInitialDataHandler();
+        // Fetch data on every 60 seconds.
+        setInterval(this.fetchInitialDataHandler, 60000);
+    }
+
 
     render() {
         const { loading } = this.state;
         const loader = (loading ? <LoadingIndicator /> : null);
 
 
-        // Filter first 50 top ranked crpyto currencies.
+        // Filter first 50 top ranked crypto currencies.
         let topRankedValues = Object.values(this.state.data).filter(function (item) {
             return item.rank <= 50;
         });
@@ -45,10 +103,16 @@ class Home extends Component {
             return (
                 <RowItem
                     key={row.id}
-                    name={row.name}
                     shortName={row.symbol}
+                    name={row.name}
+                    cryptoSymbols={row.symbol}
+                    cryptoName={row.symbol}
                     values={parseFloat(row.quotes['USD'].price).toFixed(2)}
+                    value={this.state.values[row.symbol]}
                     lastChanges={row.quotes['USD'].percent_change_24h}
+                    handleSubmit={this.handleSubmit}
+                    handleChange={this.handleChange}
+                    disabled={this.state.inputDisabled}
                 />
             );
         });
