@@ -1,0 +1,15 @@
+ul {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+li {
+    list-style: none;
+    max-width: 200px;
+    background-color: #c5c5c5;
+}
+
+.table-wrapper {
+    max-width: 1000px;
+    margin: auto;
+}
