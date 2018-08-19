@@ -4,7 +4,7 @@ import RowItem from '../../Presentational/rowItem/rowItem';
 import LoadingIndicator from '../../Presentational/loadingIndicator/loadingIndicator';
 
 
-class Home extends Component {
+export default class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -24,6 +24,7 @@ class Home extends Component {
         fetch(apiURL)
             .then((response) => { return response.json(); })
             .then(data => {
+                console.log(data)
                 this.setState({
                     data: data.data,
                     loading: false,
@@ -34,7 +35,7 @@ class Home extends Component {
     /*
     * Function to populate input values. Load saved currencies from localStorage and check if input name and key matches, if so set input value.
     */
-    populateInputsHandler = () => {
+    loadFromLocalStorage = () => {
         const currencies = localStorage.getItem("currencies");
 
         if (currencies == null) return;
@@ -58,7 +59,7 @@ class Home extends Component {
             });
             listElements.map(listElement => {
                 if (listElement.outerHTML.includes(key)) {
-                    listElement.textContent = value;
+                    listElement.textContent = `$ ${value}`;
                 }
                 return listElements;
             });
@@ -90,7 +91,7 @@ class Home extends Component {
     };
 
     componentDidUpdate() {
-        this.populateInputsHandler();
+        this.loadFromLocalStorage();
     }
 
     componentWillMount() {
@@ -116,6 +117,7 @@ class Home extends Component {
                     key={row.id}
                     shortName={row.symbol}
                     name={row.name}
+                    id={row.id}
                     cryptoSymbols={row.symbol}
                     cryptoName={row.symbol}
                     values={parseFloat(row.quotes['USD'].price).toFixed(4)}
@@ -134,10 +136,10 @@ class Home extends Component {
                 <div className="table-wrapper">
                     {tableRows}
                 </div>
+
             </React.Fragment>
 
         );
     }
 }
 
-export default Home;

@@ -1,16 +1,23 @@
 import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 
 export default class RowItem extends Component {
     render() {
         return (
             <React.Fragment>
                 <ul className="rowItem" key={this.props.id}>
-                    <li>{this.props.name}</li>
-                    <li>{this.props.shortName}</li>
+                    <li>
+                        {this.props.name}
+                    </li>
+                    <li>
+                        <Link id={this.props.id} to={this.props.shortName}>
+                            {this.props.shortName}
+                        </Link>
+                    </li>
                     <li>$ {this.props.values}</li>
                     <li
                         style={this.props.lastChanges < 0 ? { color: 'red' } : { color: 'green' }}>{this.props.lastChanges}%
-                    </li>
+                        </li>
 
                     <form onSubmit={this.props.handleSubmit}>
                         <input
