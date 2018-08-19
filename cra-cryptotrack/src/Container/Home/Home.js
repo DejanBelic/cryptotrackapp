@@ -89,7 +89,9 @@ export default class Home extends Component {
             }
         })
     };
-
+   /*
+    * Function used to store clicked element ID which will be used as parameter to make api call.
+    */
     linkHandler = (event) => {
         localStorage.setItem('parameterID', event.target.id);
     }
