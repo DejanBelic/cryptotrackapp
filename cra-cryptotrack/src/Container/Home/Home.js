@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import './Home.css';
-import RowItem from '../../Presentational/rowItem/rowItem';
-import LoadingIndicator from '../../Presentational/loadingIndicator/loadingIndicator';
-
+import RowItem from '../../Presentational/RowItem/RowItem';
+import LoadingIndicator from '../../Presentational/LoadingIndicator/LoadingIndicator';
 
 export default class Home extends Component {
     constructor(props) {
@@ -13,58 +12,38 @@ export default class Home extends Component {
             inputDisabled: true,
             values: {},
             defaultValue: {}
-        }
+        };
     }
 
     fetchInitialDataHandler = () => {
         // Set state to loading true which will trigger loading indicator.
         this.setState({ loading: true });
 
-        const apiURL = ' https://api.coinmarketcap.com/v2/ticker/';
+        const apiURL = " https://api.coinmarketcap.com/v2/ticker/";
         fetch(apiURL)
-            .then((response) => { return response.json(); })
+            .then(response => {
+                return response.json();
+            })
             .then(data => {
-                console.log(data)
                 this.setState({
                     data: data.data,
-                    loading: false,
-                })
-            })
-    }
+                    loading: false
+                });
+            });
+    };
 
     /*
-    * Function to populate input values. Load saved currencies from localStorage and check if input name and key matches, if so set input value.
+    * Function to populate input values and available currency.
     */
     loadFromLocalStorage = () => {
         const currencies = localStorage.getItem("currencies");
 
         if (currencies == null) return;
-
-        const inputParse = JSON.parse(currencies);
-        // Get Node collection of inputs.
-        const inputsAvailable = document.querySelectorAll('input[name]');
-        // Get Node collection of list elements.
-        const calculatedAmountElements = document.querySelectorAll('li[name]');
-        // Convert Node collection to array.
-        const listElements = [...calculatedAmountElements];
-        const InputElements = [...inputsAvailable];
-
-        // Object of same key-value pairs from inputs.
-        for (let [key, value] of Object.entries(inputParse)) {
-            InputElements.map(inputElement => {
-                if (inputElement.name === key) {
-                    inputElement.value = value;
-                }
-                return InputElements;
-            });
-            listElements.map(listElement => {
-                if (listElement.outerHTML.includes(key)) {
-                    listElement.textContent = `$ ${value}`;
-                }
-                return listElements;
-            });
-        }
-    }
+        // Get all data from localStorage, and set it as component data.
+        this.setState({
+            values: JSON.parse(currencies)
+        });
+    };
 
     /*
     * Function for handling submit. Set all input values to localStorage.
@@ -72,8 +51,8 @@ export default class Home extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
         let availableCurrencies = JSON.stringify(this.state.values);
-        window.localStorage.setItem('currencies', availableCurrencies);
-    }
+        window.localStorage.setItem("currencies", availableCurrencies);
+    };
 
     /*
     * Function for handling inputs, and disabling submits.
@@ -86,26 +65,26 @@ export default class Home extends Component {
                     [symbol]: number,
                     [amount]: name
                 }
-            }
-        })
+            };
+        });
     };
-   /*
-    * Function used to store clicked element ID which will be used as parameter to make api call.
-    */
+    /*
+     * Function used to store clicked element ID which will be used as parameter to make api call.
+     */
     linkHandler = (event) => {
-        localStorage.setItem('parameterID', event.target.id);
-    }
+        localStorage.setItem("parameterID", event.target.id);
+    };
 
-    componentDidUpdate() {
+    componentDidMount() {
+        this.fetchInitialDataHandler();
+        // Fetch data on every 60 seconds.
+        this.interval = setInterval(this.fetchInitialDataHandler, 60000);
         this.loadFromLocalStorage();
     }
 
-    componentWillMount() {
-        this.fetchInitialDataHandler();
-        // Fetch data on every 60 seconds.
-        setInterval(this.fetchInitialDataHandler, 60000);
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
-
 
     render() {
         const { loading } = this.state;
@@ -127,13 +106,15 @@ export default class Home extends Component {
                     linkHandler={this.linkHandler}
                     cryptoSymbols={row.symbol}
                     cryptoName={row.symbol}
-                    values={parseFloat(row.quotes['USD'].price).toFixed(4)}
+                    values={parseFloat(row.quotes["USD"].price).toFixed(4)}
                     value={this.state.values[row.symbol]}
-                    lastChanges={row.quotes['USD'].percent_change_24h}
+                    lastChanges={row.quotes["USD"].percent_change_24h}
                     handleSubmit={this.handleSubmit}
                     handleChange={this.handleChange}
                     disabled={this.state.inputDisabled}
-                    amount={parseFloat(row.quotes['USD'].price).toFixed(2) * this.state.values}
+                    amount={
+                        parseFloat(row.quotes["USD"].price).toFixed(2) * this.state.values
+                    }
                 />
             );
         });
@@ -141,12 +122,17 @@ export default class Home extends Component {
             <React.Fragment>
                 {loader}
                 <div className="table-wrapper">
+                    <div className="heading-wrapper">
+                        <div className="heading-item ">Name</div>
+                        <div className="heading-item ">Short name</div>
+                        <div className="heading-item ">$ value</div>
+                        <div className="heading-item ">last 24h</div>
+                        <div className="heading-item ">Amount you own</div>
+                        <div className="heading-item ">$ Value of your coin</div>
+                    </div>
                     {tableRows}
                 </div>
-
             </React.Fragment>
-
         );
     }
 }
-

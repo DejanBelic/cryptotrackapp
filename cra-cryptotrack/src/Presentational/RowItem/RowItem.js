@@ -26,6 +26,7 @@ export default class RowItem extends Component {
                         <input
                             type="text"
                             name={this.props.cryptoName}
+                            value={this.props.value || ''}
                             onChange={this.handleChange}
                         />
                         <input
@@ -43,9 +44,14 @@ export default class RowItem extends Component {
     handleChange = event => {
         const regExp = /^[0-9\b]+$/;
         const text = event.target.value;
-        if (text === '' || regExp.test(text)) {
+        if (text === "" || regExp.test(text)) {
             const number = parseFloat(text);
-            this.props.handleChange(this.props.cryptoName, number, this.props.name, (this.props.values * (this.props.value || 0.0)).toFixed(2));
+            this.props.handleChange(
+                this.props.cryptoName,
+                number,
+                this.props.name,
+                (this.props.values * (this.props.value || 0.0)).toFixed(2)
+            );
         }
-    }
+    };
 }

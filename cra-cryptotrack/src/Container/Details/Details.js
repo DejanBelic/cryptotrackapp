@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import LoadingIndicator from '../../Presentational/loadingIndicator/loadingIndicator';
+import LoadingIndicator from '../../Presentational/LoadingIndicator/LoadingIndicator';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';

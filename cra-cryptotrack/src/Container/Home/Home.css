@@ -1,6 +1,6 @@
 ul {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     margin: 0;
     padding: 10px;
@@ -8,11 +8,15 @@ ul {
 
 li {
     list-style: none;
-    max-width: 200px;
+    min-width: 200px;
+}
+
+ul li:last-of-type {
+    text-align: center;
 }
 
 .table-wrapper {
-    max-width: 1000px;
+    max-width: 1260px;
     margin: auto;
 }
 
@@ -26,4 +30,21 @@ input {
 
 .btn-submit {
     width: 100%;
+}
+
+.heading-item {
+    display: inline-block;
+    padding: 5px;
+    background-color: #c5c5c5;
+    margin-bottom: 1px;
+    font-size: 15px;
+    font-weight: 600;
+    margin-right: 1px;
+    min-width: 200px;
+}
+
+.heading-wrapper {
+    background-color: #c5c5c5;
+    display: flex;
+    justify-content: space-between;
 }

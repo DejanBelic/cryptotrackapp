@@ -1,5 +1,5 @@
 import React from 'react';
-import  './loadingIndicator.css';
+import './LoadingIndicator.css';
 
 const LoadingIndicator = () => (
     <div id="wrapper">
