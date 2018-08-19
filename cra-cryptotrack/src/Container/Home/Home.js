@@ -90,6 +90,10 @@ export default class Home extends Component {
         })
     };
 
+    linkHandler = (event) => {
+        localStorage.setItem('parameterID', event.target.id);
+    }
+
     componentDidUpdate() {
         this.loadFromLocalStorage();
     }
@@ -118,6 +122,7 @@ export default class Home extends Component {
                     shortName={row.symbol}
                     name={row.name}
                     id={row.id}
+                    linkHandler={this.linkHandler}
                     cryptoSymbols={row.symbol}
                     cryptoName={row.symbol}
                     values={parseFloat(row.quotes['USD'].price).toFixed(4)}

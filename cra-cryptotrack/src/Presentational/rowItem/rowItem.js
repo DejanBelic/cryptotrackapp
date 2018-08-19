@@ -10,7 +10,10 @@ export default class RowItem extends Component {
                         {this.props.name}
                     </li>
                     <li>
-                        <Link id={this.props.id} to={this.props.shortName}>
+                        <Link id={this.props.id}
+                            to={this.props.shortName}
+                            onClick={this.props.linkHandler}
+                        >
                             {this.props.shortName}
                         </Link>
                     </li>
