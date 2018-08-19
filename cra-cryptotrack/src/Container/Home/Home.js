@@ -96,7 +96,7 @@ export default class Home extends Component {
             return item.rank <= 50;
         });
 
-        let tableRows = Object.values(topRankedValues).map(row => {
+        let tableRows = topRankedValues.map(row => {
             return (
                 <RowItem
                     key={row.id}
@@ -104,17 +104,12 @@ export default class Home extends Component {
                     name={row.name}
                     id={row.id}
                     linkHandler={this.linkHandler}
-                    cryptoSymbols={row.symbol}
                     cryptoName={row.symbol}
                     values={parseFloat(row.quotes["USD"].price).toFixed(4)}
                     value={this.state.values[row.symbol]}
                     lastChanges={row.quotes["USD"].percent_change_24h}
                     handleSubmit={this.handleSubmit}
                     handleChange={this.handleChange}
-                    disabled={this.state.inputDisabled}
-                    amount={
-                        parseFloat(row.quotes["USD"].price).toFixed(2) * this.state.values
-                    }
                 />
             );
         });

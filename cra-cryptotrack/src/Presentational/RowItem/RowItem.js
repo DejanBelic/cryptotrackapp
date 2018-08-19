@@ -5,7 +5,7 @@ export default class RowItem extends Component {
     render() {
         return (
             <React.Fragment>
-                <ul className="rowItem" key={this.props.id}>
+                <ul className="rowItem">
                     <li>
                         {this.props.name}
                     </li>
