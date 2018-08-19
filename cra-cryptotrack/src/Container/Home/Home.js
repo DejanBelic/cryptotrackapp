@@ -11,7 +11,8 @@ class Home extends Component {
             data: [],
             loading: false,
             inputDisabled: true,
-            values: {}
+            values: {},
+            defaultValue: {}
         }
     }
 
@@ -27,7 +28,6 @@ class Home extends Component {
                     data: data.data,
                     loading: false,
                 })
-                console.log(data.data);
             })
     }
 
@@ -42,15 +42,26 @@ class Home extends Component {
         const inputParse = JSON.parse(currencies);
         // Get Node collection of inputs.
         const inputsAvailable = document.querySelectorAll('input[name]');
+        // Get Node collection of list elements.
+        const calculatedAmountElements = document.querySelectorAll('li[name]');
         // Convert Node collection to array.
+        const listElements = [...calculatedAmountElements];
         const InputElements = [...inputsAvailable];
+
         // Object of same key-value pairs from inputs.
         for (let [key, value] of Object.entries(inputParse)) {
             InputElements.map(inputElement => {
                 if (inputElement.name === key) {
                     inputElement.value = value;
                 }
-            })
+                return InputElements;
+            });
+            listElements.map(listElement => {
+                if (listElement.outerHTML.includes(key)) {
+                    listElement.textContent = value;
+                }
+                return listElements;
+            });
         }
     }
 
@@ -66,16 +77,16 @@ class Home extends Component {
     /*
     * Function for handling inputs, and disabling submits.
     */
-    handleChange = (symbol, event) => {
-        event.persist();
+    handleChange = (symbol, number, amount, name) => {
         this.setState(prevState => {
             return {
                 values: {
                     ...prevState.values,
-                    [symbol]: event.target.value
+                    [symbol]: number,
+                    [amount]: name
                 }
-            };
-        });
+            }
+        })
     };
 
     componentDidUpdate() {
@@ -107,12 +118,13 @@ class Home extends Component {
                     name={row.name}
                     cryptoSymbols={row.symbol}
                     cryptoName={row.symbol}
-                    values={parseFloat(row.quotes['USD'].price).toFixed(2)}
+                    values={parseFloat(row.quotes['USD'].price).toFixed(4)}
                     value={this.state.values[row.symbol]}
                     lastChanges={row.quotes['USD'].percent_change_24h}
                     handleSubmit={this.handleSubmit}
                     handleChange={this.handleChange}
                     disabled={this.state.inputDisabled}
+                    amount={parseFloat(row.quotes['USD'].price).toFixed(2) * this.state.values}
                 />
             );
         });
